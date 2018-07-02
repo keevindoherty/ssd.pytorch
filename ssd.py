@@ -78,8 +78,12 @@ class SSD(nn.Module):
         sources.append(s)
 
         # apply vgg up to fc7
-        for k in range(23, len(self.vgg)):
+        for k in range(23, len(self.vgg)-1):
+            # print(k, self.vgg[k])
             x = self.vgg[k](x)
+
+        # x = F.dropout(x, p=0.5, training=(self.phase == 'train'), inplace=True)
+        x = self.vgg[len(self.vgg)-1](x)
         sources.append(x)
 
         # apply extra layers and cache source layer outputs
